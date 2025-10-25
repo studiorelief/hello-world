@@ -141,40 +141,35 @@ webflowWidgets.validateForm('form-preview');
         console.log('Disponible dans window.webflowWidgets:', window.webflowWidgets);
         console.log('Fonctions disponibles:', Object.keys(window.webflowWidgets));
 
-        // Auto-refresh: surveiller les modifications des fichiers
-        let lastJsModified = null;
-        let lastCssModified = null;
+        // Auto-refresh: surveiller les modifications via version.json
+        let lastVersion = null;
 
         async function checkForUpdates() {
             try {
-                // Vérifier index.js
-                const jsResponse = await fetch('index.js', { method: 'HEAD' });
-                const jsLastModified = jsResponse.headers.get('last-modified');
+                // Vérifier le fichier version.json avec cache-busting
+                const response = await fetch('version.json?t=' + Date.now());
+                const data = await response.json();
 
-                // Vérifier index.css
-                const cssResponse = await fetch('index.css', { method: 'HEAD' });
-                const cssLastModified = cssResponse.headers.get('last-modified');
-
-                // Si c'est la première vérification, enregistrer les dates
-                if (!lastJsModified) {
-                    lastJsModified = jsLastModified;
-                    lastCssModified = cssLastModified;
+                // Si c'est la première vérification
+                if (!lastVersion) {
+                    lastVersion = data.timestamp;
+                    console.log('🔄 Auto-refresh activé - Version:', data.buildTime);
                     return;
                 }
 
-                // Si un fichier a changé, recharger la page
-                if (jsLastModified !== lastJsModified || cssLastModified !== lastCssModified) {
-                    console.log('🔄 Fichiers modifiés détectés, rechargement...');
+                // Si la version a changé, recharger la page
+                if (data.timestamp !== lastVersion) {
+                    console.log('🔄 Nouvelle version détectée, rechargement...', data.buildTime);
+                    lastVersion = data.timestamp;
                     location.reload();
                 }
             } catch (error) {
-                // Ignorer les erreurs silencieusement
+                console.warn('⚠️ Impossible de vérifier les mises à jour:', error.message);
             }
         }
 
-        // Vérifier toutes les 1 seconde
+        // Vérifier toutes les secondes
         setInterval(checkForUpdates, 1000);
-        console.log('🔄 Auto-refresh activé (vérification toutes les 1s)');
     </script>
 </body>
 </html>

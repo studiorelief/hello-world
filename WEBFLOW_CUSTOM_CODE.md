@@ -14,30 +14,25 @@ Utilisez ce code dans **Project Settings > Custom Code > Head Code** de votre pr
 <!-- Auto-reload sur changements -->
 <script>
 (function() {
-  let lastJsModified = null;
-  let lastCssModified = null;
+  let lastVersion = null;
 
   async function checkForUpdates() {
     try {
-      // Vérifier index.js
-      const jsResponse = await fetch('http://localhost:8080/index.js', { method: 'HEAD' });
-      const jsLastModified = jsResponse.headers.get('last-modified');
-
-      // Vérifier index.css
-      const cssResponse = await fetch('http://localhost:8080/index.css', { method: 'HEAD' });
-      const cssLastModified = cssResponse.headers.get('last-modified');
+      // Vérifier le fichier version.json avec cache-busting
+      const response = await fetch('http://localhost:8080/version.json?t=' + Date.now());
+      const data = await response.json();
 
       // Si c'est la première vérification
-      if (!lastJsModified) {
-        lastJsModified = jsLastModified;
-        lastCssModified = cssLastModified;
-        console.log('🔄 Hot reload activé (vérification toutes les 2s)');
+      if (!lastVersion) {
+        lastVersion = data.timestamp;
+        console.log('🔄 Hot reload activé - Version:', data.buildTime);
         return;
       }
 
-      // Si un fichier a changé, recharger
-      if (jsLastModified !== lastJsModified || cssLastModified !== lastCssModified) {
-        console.log('🔄 Fichiers modifiés détectés, rechargement...');
+      // Si la version a changé, recharger
+      if (data.timestamp !== lastVersion) {
+        console.log('🔄 Nouvelle version détectée, rechargement...', data.buildTime);
+        lastVersion = data.timestamp;
         location.reload();
       }
     } catch (error) {
@@ -45,8 +40,8 @@ Utilisez ce code dans **Project Settings > Custom Code > Head Code** de votre pr
     }
   }
 
-  // Vérifier toutes les 2 secondes
-  setInterval(checkForUpdates, 2000);
+  // Vérifier toutes les secondes pour un feedback plus rapide
+  setInterval(checkForUpdates, 1000);
 })();
 </script>
 ```
@@ -146,4 +141,6 @@ Une fois le code chargé, vous pouvez utiliser les fonctions dans vos éléments
 
 - Le mode développement nécessite que votre serveur local soit accessible
 - En production, assurez-vous que votre CDN supporte HTTPS
-- Les changements sont détectés toutes les 2 secondes en mode dev
+- Les changements sont détectés **toutes les secondes** via `version.json`
+- Le hot-reload utilise un système de timestamp fiable (pas de cache HTTP)
+- Ouvrez la console (F12) pour voir les logs de rechargement

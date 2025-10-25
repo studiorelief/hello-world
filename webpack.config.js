@@ -1,11 +1,30 @@
 const path = require("path");
+const fs = require("fs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// Simple plugin to generate preview.html after build
+// Plugin to generate preview.html after build
 class GeneratePreviewPlugin {
   apply(compiler) {
     compiler.hooks.afterEmit.tap("GeneratePreviewPlugin", () => {
       require("./scripts/generate-preview.js");
+    });
+  }
+}
+
+// Plugin to generate version.json for hot-reload detection
+class GenerateVersionPlugin {
+  apply(compiler) {
+    compiler.hooks.afterEmit.tap("GenerateVersionPlugin", () => {
+      const distPath = path.join(__dirname, "dist");
+      const versionPath = path.join(distPath, "version.json");
+
+      const versionData = {
+        timestamp: Date.now(),
+        buildTime: new Date().toISOString()
+      };
+
+      fs.writeFileSync(versionPath, JSON.stringify(versionData, null, 2));
+      console.log(`✅ version.json updated: ${versionData.buildTime}`);
     });
   }
 }
@@ -46,6 +65,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "index.css",
     }),
+    new GenerateVersionPlugin(),
     new GeneratePreviewPlugin(),
   ],
   // Configuration optimisée pour le watch mode
