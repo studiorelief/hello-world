@@ -1,0 +1,129 @@
+/**
+ * Webflow Widgets Styles
+ * Styles pour les fonctions Tricks
+ */
+
+/* Animation pour les éléments .round */
+.round {
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+}
+
+body.dark-mode a {
+  color: #64b5f6;
+}
+
+/* Animation on scroll - éléments invisibles par défaut */
+.animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Styles pour les formulaires - erreurs */
+input.error,
+textarea.error {
+  border-color: #ef4444 !important;
+  background-color: #fee !important;
+}
+
+input.error:focus,
+textarea.error:focus {
+  outline-color: #ef4444 !important;
+}
+
+/* Effet de parallaxe */
+.parallax {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Effet de copie réussie */
+.copied {
+  position: relative;
+}
+
+.copied::after {
+  content: "Copié !";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #10b981;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Compteur stylé */
+.counter {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #3b82f6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Smooth transitions globales */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilitaires */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Loading indicator */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

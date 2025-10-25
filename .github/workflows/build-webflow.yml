@@ -1,11 +1,16 @@
 name: Build Webflow Widgets
 
+# Ce workflow build les widgets TypeScript pour Webflow
+# IMPORTANT: Il ne pousse PAS automatiquement vers Webflow Cloud
+# Les fichiers sont uniquement disponibles en tant qu'artifacts GitHub
+
 on:
     push:
         branches: [main, master]
         paths:
             - "src/webflow-entry.ts"
             - "src/webflow-styles.css"
+            - "src/functions/**/*.ts"
             - "webpack.config.js"
     workflow_dispatch:
 
@@ -28,6 +33,7 @@ jobs:
             - name: Build webflow widgets
               run: npm run build:webflow
 
+            # Les fichiers sont uploadés en artifacts, pas poussés vers Webflow Cloud
             - name: Upload build artifacts
               uses: actions/upload-artifact@v4
               with:

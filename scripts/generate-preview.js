@@ -140,6 +140,41 @@ webflowWidgets.validateForm('form-preview');
         console.log('=== Webflow Widgets Preview ===');
         console.log('Disponible dans window.webflowWidgets:', window.webflowWidgets);
         console.log('Fonctions disponibles:', Object.keys(window.webflowWidgets));
+
+        // Auto-refresh: surveiller les modifications des fichiers
+        let lastJsModified = null;
+        let lastCssModified = null;
+
+        async function checkForUpdates() {
+            try {
+                // Vérifier index.js
+                const jsResponse = await fetch('index.js', { method: 'HEAD' });
+                const jsLastModified = jsResponse.headers.get('last-modified');
+
+                // Vérifier index.css
+                const cssResponse = await fetch('index.css', { method: 'HEAD' });
+                const cssLastModified = cssResponse.headers.get('last-modified');
+
+                // Si c'est la première vérification, enregistrer les dates
+                if (!lastJsModified) {
+                    lastJsModified = jsLastModified;
+                    lastCssModified = cssLastModified;
+                    return;
+                }
+
+                // Si un fichier a changé, recharger la page
+                if (jsLastModified !== lastJsModified || cssLastModified !== lastCssModified) {
+                    console.log('🔄 Fichiers modifiés détectés, rechargement...');
+                    location.reload();
+                }
+            } catch (error) {
+                // Ignorer les erreurs silencieusement
+            }
+        }
+
+        // Vérifier toutes les 1 seconde
+        setInterval(checkForUpdates, 1000);
+        console.log('🔄 Auto-refresh activé (vérification toutes les 1s)');
     </script>
 </body>
 </html>
