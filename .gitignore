@@ -45,3 +45,6 @@ next-env.d.ts
 
 # webflow cli build artifacts
 .tmp/
+
+# webflow build output
+/dist

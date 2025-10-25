@@ -15,8 +15,8 @@ export function Navbar({
   navbarLinkProducts = "Products",
   navbarLinkResources = "Resources",
   navbarLinkContact = "Contact",
+  navbarLinkHello = "Hello",
   buttonTextGetStarted = "Get started",
-  localeDropdownSlot,
 }) {
   _interactions.useInteractions(_interactionsData, _styles);
 
@@ -49,7 +49,7 @@ export function Navbar({
           <_Builtin.NavbarBrand
             className={_utils.cx(_styles, "navbar-logo-link")}
             options={{
-              href: "#",
+              href: "/",
             }}
           >
             <_Builtin.Image
@@ -98,7 +98,15 @@ export function Navbar({
               <_Builtin.NavbarLink
                 className={_utils.cx(_styles, "navbar-link")}
                 options={{
-                  href: "/contact-us",
+                  href: "/hello",
+                }}
+              >
+                {navbarLinkHello}
+              </_Builtin.NavbarLink>
+              <_Builtin.NavbarLink
+                className={_utils.cx(_styles, "navbar-link")}
+                options={{
+                  href: "#",
                 }}
               >
                 {navbarLinkContact}

@@ -1,0 +1,26 @@
+/* Webflow Widget Styles */
+
+.error {
+  border: 2px solid #ff0000 !important;
+  background-color: #fff5f5 !important;
+}
+
+.webflow-widget-button {
+  padding: 10px 20px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.webflow-widget-button:hover {
+  background-color: #005bb5;
+}
+
+.webflow-widget-container {
+  padding: 20px;
+  margin: 10px 0;
+}

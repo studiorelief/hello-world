@@ -1,6 +1,7 @@
 {
   "cloud": {
-    "framework": "nextjs"
+    "framework": "nextjs",
+    "project_id": "1e05ecc7-7bee-4010-8717-1353baaa5c73"
   },
   "devlink": {
     "rootDir": "./src/devlink",
@@ -12,5 +13,13 @@
       "lastPrompted": 1752758056243,
       "version": "1.8.20"
     }
+  },
+  "library": {
+    "name": "Code Component",
+    "components": [
+      "./src/**/*.webflow.@(js|jsx|mjs|ts|tsx)"
+    ],
+    "description": "React Component Library",
+    "id": "code-component"
   }
 }
