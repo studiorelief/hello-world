@@ -19,6 +19,7 @@ npm run dev:webflow
 ```
 
 Cela va :
+
 1. Démarrer webpack en mode watch (recompilation automatique)
 2. Lancer un serveur HTTP sur `http://localhost:8080`
 3. Ouvrir automatiquement `http://localhost:8080/preview.html` dans votre navigateur
