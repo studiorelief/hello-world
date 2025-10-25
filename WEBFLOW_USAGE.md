@@ -1,30 +1,57 @@
 # Guide d'utilisation Webflow
 
-Ce projet permet de créer des fonctions TypeScript simple que vous pouvez injecter dans Webflow.
+Ce projet permet de créer des fonctions TypeScript et de les injecter dans Webflow.
 
-## Build
+## 🎯 Modes de développement
 
-Pour générer les fichiers `dist/index.js` et `dist/index.css` :
+### Mode 1 : Preview locale (test rapide)
 
-```bash
-npm run build:webflow
-```
-
-## Développement avec Preview Locale
-
-Pour développer avec un serveur local et preview automatique :
+Pour tester vos widgets dans une page HTML locale :
 
 ```bash
 npm run dev:webflow
 ```
 
 Cela va :
+- Démarrer webpack en mode watch (recompilation automatique)
+- Lancer un serveur HTTP avec CORS sur `http://localhost:8080`
+- Ouvrir `http://localhost:8080/preview.html` dans votre navigateur
+- Auto-refresh de la page quand les fichiers changent
 
-1. Démarrer webpack en mode watch (recompilation automatique)
-2. Lancer un serveur HTTP sur `http://localhost:8080`
-3. Ouvrir automatiquement `http://localhost:8080/preview.html` dans votre navigateur
+### Mode 2 : Site Webflow (développement réel)
 
-La page de preview permet de tester toutes les fonctionnalités des widgets en temps réel.
+**Le vrai workflow de développement - votre site Webflow charge les fichiers depuis localhost**
+
+**Étape 1 - Démarrer le serveur local** :
+```bash
+npm run dev:webflow
+```
+
+**Étape 2 - Configurer votre site Webflow** :
+1. Allez dans **Project Settings > Custom Code > Head Code**
+2. Copiez le code de développement depuis [WEBFLOW_CUSTOM_CODE.md](./WEBFLOW_CUSTOM_CODE.md)
+3. Sauvegardez
+
+**Étape 3 - Développer** :
+- Ouvrez votre site Webflow (ex: https://webflow-cloud---doc---test.webflow.io/)
+- Éditez `src/functions/Tricks.ts`
+- Webpack recompile automatiquement
+- Votre site Webflow se rafraîchit automatiquement toutes les 2 secondes
+
+**Avantages** :
+- Vous testez directement sur votre vrai site Webflow
+- Hot-reload automatique
+- Pas besoin de republier ou uploader
+
+## Build pour production
+
+Pour générer les fichiers finaux :
+
+```bash
+npm run build:webflow
+```
+
+Génère `dist/index.js` et `dist/index.css` minifiés, prêts pour votre CDN.
 
 ## Intégration dans Webflow
 
@@ -68,22 +95,31 @@ webflowWidgets.validateForm("form-id");
 
 ## Créer vos propres fonctions
 
-Modifiez le fichier `src/webflow-entry.ts` pour ajouter vos propres fonctions :
+**Ajoutez vos fonctions dans `src/functions/Tricks.ts`** :
 
 ```typescript
-// Ajoutez votre fonction
-export function maFonction() {
+/**
+ * Ma nouvelle fonction
+ */
+export function maFonction(param: string): void {
+  console.log('Ma fonction:', param);
   // Votre code ici
 }
+```
 
-// Exposez-la dans l'objet global
-(window as any).webflowWidgets = {
-  ...(window as any).webflowWidgets,
-  maFonction,
+**Puis exposez-la dans `src/webflow-entry.ts`** :
+
+```typescript
+import * as Tricks from './functions/Tricks';
+
+window.webflowWidgets = {
+  // ... fonctions existantes
+  maFonction: Tricks.maFonction, // Ajoutez ici
 };
 ```
 
-Puis rebuilder : `npm run build:webflow`
+**En mode dev** : webpack recompile automatiquement
+**En mode prod** : `npm run build:webflow`
 
 ## Styles CSS
 
