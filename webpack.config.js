@@ -18,6 +18,7 @@ module.exports = {
     library: "webflowWidgets",
     libraryTarget: "umd",
     globalObject: "this",
+    clean: true, // Nettoie le dossier dist avant chaque build
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
@@ -30,6 +31,7 @@ module.exports = {
           loader: "ts-loader",
           options: {
             configFile: "tsconfig.webflow.json",
+            transpileOnly: false, // Force la vérification complète des types
           },
         },
         exclude: /node_modules/,
@@ -46,5 +48,13 @@ module.exports = {
     }),
     new GeneratePreviewPlugin(),
   ],
+  // Configuration optimisée pour le watch mode
+  watchOptions: {
+    aggregateTimeout: 300, // Délai avant rebuild après changement
+    poll: 1000, // Polling toutes les secondes (utile si les changements ne sont pas détectés)
+    ignored: /node_modules/,
+  },
+  // Désactive le cache pour garantir les rebuilds
+  cache: false,
   mode: "production",
 };

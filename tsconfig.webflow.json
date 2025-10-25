@@ -5,6 +5,10 @@
     "declaration": false,
     "sourceMap": false
   },
-  "include": ["src/webflow-entry.ts", "src/webflow-styles.css"],
+  "include": [
+    "src/webflow-entry.ts",
+    "src/webflow-styles.css",
+    "src/functions/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
